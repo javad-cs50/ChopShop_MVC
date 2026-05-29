@@ -110,12 +110,6 @@ Configure the database connection string inside:
 ChopShop.Web/appsettings.json
 ```
 
-Apply migrations:
-
-```bash id="0vg8hq"
-dotnet ef database update
-```
-
 Run the application:
 
 ```bash id="bopttq"
