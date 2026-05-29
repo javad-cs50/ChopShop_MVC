@@ -1,0 +1,59 @@
+﻿@model Product
+<div class="border-0 card shadow my-4">
+    <div class="card-header text-center bg-danger text-white py-3 rounded-top">
+        <h2 class="mb-0">Delete Product</h2>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+            <input asp-for="Id" hidden />
+            <input asp-for=ImageUrl" hidden />
+            <div class="row">
+                <!-- Form -->
+                <div class="col-9 col-md-9">
+                    <div class="form-floating py-2 mb-2">
+                        <input asp-for="Title" class="form-control" disabled />
+                        <label asp-for="Title">Title</label>
+
+                    </div>
+                    <div class="form-floating py-2 mb-2">
+                        <textarea asp-for="Description" class="form-control" style="height: 100px;" disabled></textarea>
+                        <label asp-for="Description">Description</label>
+
+                    </div>
+                    <div class="form-floating py-2 mb-2">
+                        <input asp-for="Price" type="number" class="form-control" disabled />
+                        <label asp-for="Price">Price</label>
+
+                    </div>
+                </div>
+                <div class="col-3 col-md-3 mt-3 mt-md-0 d-flex  align-items-center">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="~/@Model.ImageUrl" alt="Product Image" class="img-fluid rounded shadow" style="border:1px solid #ccc; max-height: 250px; object-fit: contain;" />
+                    }
+                    else
+                    {
+                        <div class="text-muted text-center border p-3 rounded" style="max-height: 250px; width: 100%; display: flex; align-items: center; justify-content: center;">
+                            No Image Selected
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- Image -->
+            
+            
+
+            <!-- Buttons -->
+            <div class="row pt-4">
+                <div class="col-6 col-md-3 mb-2">
+                    <button type="submit" class="btn btn-danger form-control">Delete</button>
+                </div>
+                <div class="col-6 col-md-3 mb-2">
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary form-control">Back To List</a>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>

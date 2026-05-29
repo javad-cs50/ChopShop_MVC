@@ -1,0 +1,86 @@
+﻿@model ShoppingCartVM
+@{
+    ViewData["Title"] = "Shopping Cart";
+    decimal orderTotal = 0;
+}
+@Html.AntiForgeryToken()
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary bg-gradient text-white d-flex align-items-center justify-content-between flex-wrap p-3">
+            <h2 class="h5 mb-0 me-2"><i class="fas fa-shopping-cart me-2" aria-hidden="true"></i> Shopping Cart</h2>
+            <a class="btn btn-outline-light btn-sm" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-arrow-left me-1" aria-hidden="true"></i> Continue Shopping
+            </a>
+        </div>
+        <div class="card-body p-4">
+@if (Model != null && Model.ShoppingCartList.Any())
+{
+                <div class="row g-4">
+                    <div class="col-12 col-lg-8">
+                        @foreach (var item in Model.ShoppingCartList)
+                        {
+                            var itemTotal = item.Product.Price * item.Count;
+                            <div class="row align-items-center mb-4 pb-4 border-bottom">
+                                <aside class="col-12 col-md-3 text-center mb-3 mb-md-0">
+                                    <div class="product-image-container bg-light border rounded p-2 d-flex justify-content-center align-items-center" style="min-height:120px;">
+                                        <img src="~/@item.Product.ImageUrl"
+                                             alt="@item.Product.Title"
+                                             class="img-fluid rounded"
+                                             style="max-height:100px; width:auto; object-fit:contain;"
+                                             loading="lazy" />
+                                    </div>
+                                </aside>
+                                <section class="col-12 col-md-4 mb-3 mb-md-0">
+                                    <h3 class="h6 fw-bold mb-2">@item.Product.Title</h3>
+                                    @if (item.Product.Category != null)
+                                    {
+                                        <span class="badge bg-warning text-dark mb-2">@item.Product.Category.Name</span>
+                                    }
+                                    <div class="d-flex align-items-baseline gap-2">
+                                        <span class="text-muted small">Price:</span>
+                                        <div class="text-success fw-bold">@item.Product.Price.ToString("C")</div>
+                                    </div>
+                                </section>
+                                <div class="col-12 col-md-5 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                    <form asp-action="UpdateCart" method="post" class="d-flex align-items-center m-0">
+                                        <input type="hidden" name="cartId" value="@item.Id" />
+                                        <div class="input-group" style="max-width: 140px;">
+                                            <a asp-action="Minus" asp-route-cartId="@item.Id" class="btn btn-outline-secondary btn-decrement">−</a>
+                                            <input asp-for="@item.Count" type="number" readonly value="@item.Count" min="1" max="10" step="1" class="form-control text-center quantity-input" />
+                                            <a asp-action="Plus" asp-route-cartId="@item.Id" class="btn btn-outline-secondary btn-increment" >+</a>
+                                        </div>
+                                    </form>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="fs-5 text-success fw-bold">@itemTotal.ToString("C")</span>
+                                        <form asp-action="Remove" asp-route-cartId="@item.Id" method="post" class="m-0">
+                                            <input type="hidden" name="cartId" value="@item.Id" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="bg-light border rounded p-4 sticky-top" style="top: 20px;">
+                            <h4 class="h5 text-muted mb-3 border-bottom pb-2">Order Summary</h4>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="fw-semibold">Total:</span>
+                                <span class="fs-4 text-success fw-bold">@Model.OrderHeader.OrderTotal.ToString("C")</span>
+                            </div>
+                            <a asp-action="Summary" class="btn btn-primary bg-gradient btn-lg w-100 d-flex justify-content-center align-items-center gap-2">
+                                Confirm & Checkout <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+}
+else
+{
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-basket fa-3x text-muted mb-3"> </i><span class="m-2">Cart Is Empty!</span>
+                </div>
+}

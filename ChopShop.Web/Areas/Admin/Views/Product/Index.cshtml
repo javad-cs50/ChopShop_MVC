@@ -1,0 +1,78 @@
+﻿@model List<Product>
+
+<div class="container py-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-primary text-white py-3">
+            <div class="row align-items-center">
+
+                <div class="col">
+                    <h2 class="mb-0 text-center text-md-start">Product List</h2>
+                </div>
+                <div class="col-auto">
+
+                    <a asp-controller="Product" asp-action="Upsert" class="btn btn-light btn-sm text-primary">
+                        <i class="fas fa-plus-circle me-2"></i> Create New Product
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            @if (Model == null || !Model.Any())
+            {
+                <div class="alert alert-info text-center" role="alert">
+                    No products found. Click "Create New Product" to add one.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-striped table-hover mb-0" style="width:100%">
+
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-nowrap">Product Title</th>
+                                <th scope="col" class="text-nowrap">Description</th>
+                                <th scope="col" class="text-nowrap">Price</th>
+                                <th scope="col" class="text-nowrap">Category</th>
+                                <th scope="col" class="text-center text-nowrap" style="width: 150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td>@product.Title</td>
+                                    <td class="text-truncate" style="max-width: 200px;" title="@product.Description">
+                                        @if (!string.IsNullOrEmpty(product.Description) && product.Description.Length > 50)
+                                        {
+                                            @(product.Description.Substring(0, 50) + "...")
+                                        }
+                                        else
+                                        {
+                                            @product.Description
+                                        }
+                                    </td>
+                                    <td class="text-nowrap">@product.Price.ToString("C")</td>
+                                    <td class="text-nowrap">@product.Category?.Name</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-controller="Product" asp-action="Upsert" asp-route-id="@product.Id" class="btn btn-primary btn-sm me-2" title="Edit Product">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a onclick="Delete('/admin/product/delete/@product.Id')" class="btn btn-danger btn-sm" title="Delete Product">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

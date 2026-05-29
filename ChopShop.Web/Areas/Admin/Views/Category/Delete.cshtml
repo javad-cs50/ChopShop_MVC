@@ -1,0 +1,43 @@
+﻿@model Category
+<div class="card shadow-lg border-0 my-4">
+    <div class="card-header bg-danger text-white text-center py-3">
+        <h2 class="mb-0">Delete Category</h2>
+    </div>
+    <div class="card-body p-4">
+        <form method="post">
+            <div class="row g-3">
+               
+                <div class="col-12">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" disabled />
+                   
+                </div>
+                <div class="col-12 mt-3">
+                    
+                    <label asp-for="DisplayOrder" class="form-label"></label>
+                    <input asp-for="DisplayOrder" class="form-control" disabled/>
+                    
+                </div>
+                <div class="col-12 mt-4">
+                    
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-2 mb-md-0">
+                            
+                            <button type="submit" class="btn btn-danger w-100">
+                                <i class="fas @(Model.Id < 1 ? "fa-plus-circle" : "fa-edit") me-2"></i> 
+                                Delete
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            
+                            <a asp-controller="Category" asp-action="Index" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-arrow-alt-circle-left me-2"></i> 
+                                Back to List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

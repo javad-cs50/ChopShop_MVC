@@ -1,0 +1,23 @@
+﻿
+    @if (TempData["Success"] != null)
+    {
+        <script type="text/javascript">
+        $(document).ready(function(){toastr.success(@TempData["Success"])})
+        </script>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <script type="text/javascript">
+        $(document).ready(function(){toastr.error(@TempData["Error"])})
+        </script>
+    }
+    @if (TempData["Warning"] != null)
+    {
+        <script type="text/javascript">
+        $(document).ready(function(){toastr.warning(@TempData["Warning"])})
+
+        </script>
+    }
+

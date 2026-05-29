@@ -1,0 +1,78 @@
+﻿@model IEnumerable<OrderHeader>
+@{
+    List<string> statusList =  [ SD.StatusCancelled, SD.StatusInProcess, SD.StatusApproved];
+}
+<div class="container py-4">
+    <partial name="_Notification" />
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary bg-gradient text-white d-flex align-items-center justify-content-between flex-wrap p-3">
+            <h2 class="h5 mb-0 me-2">
+                <i class="fas fa-clipboard-check me-2" aria-hidden="true"></i> Order Detail
+            </h2>
+            <a class="btn btn-outline-light btn-sm" asp-area="Customer" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-arrow-left me-1" aria-hidden="true"></i> Home Page
+            </a>
+        </div>
+        
+
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
+        
+            <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn bg-info-subtle m-1"> All </a>
+            <a asp-area="Admin" asp-controller="Order" asp-action="Index" asp-route-orderStatus="@SD.StatusApproved" class="btn bg-primary-subtle m-1 ">@SD.StatusApproved</a>
+            <a asp-area="Admin" asp-controller="Order" asp-action="Index" asp-route-orderStatus="@SD.StatusInProcess" class="btn bg-success-subtle m-1">@SD.StatusInProcess</a>
+            <a asp-area="Admin" asp-controller="Order" asp-action="Index" asp-route-orderStatus="@SD.StatusCancelled" class="btn bg-danger-subtle m-1">@SD.StatusCancelled</a>
+
+            
+          </div>
+
+                @* <div class="col-auto">
+
+                    <a asp-controller="Order" asp-action="Upsert" class="btn btn-light btn-sm text-primary">
+                        <i class="fas fa-plus-circle me-2"></i> Sorting by status
+                    </a>
+                </div> *@
+            
+        
+        <div class="card-body p-4">
+            
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-striped table-hover mb-0" style="width:100%">
+
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-nowrap">Id </th>
+                                <th scope="col" class="text-nowrap">Name</th>
+                                <th scope="col" class="text-nowrap">PhoneNumber</th>
+                                <th scope="col" class="text-nowrap">Email</th>
+                                <th scope="col" class="text-nowrap">Status</th>
+                                <th scope="col" class="text-nowrap">Total</th>
+                                <th scope="col" class="text-center text-nowrap" style="width: 150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var orderHeader in Model)
+                            {
+                                <tr class="text-center">
+                                    <td>@orderHeader.ID</td>
+                                    <td class="text-nowrap">@orderHeader.Name</td>
+                                    <td class="text-nowrap">@orderHeader.PhoneNumber</td>
+                                    <td class="text-nowrap">@orderHeader.User.Email</td>
+                                    <td class="text-nowrap">@orderHeader.OrderStatus</td>
+                                    <td class="text-nowrap">@orderHeader.OrderTotal.ToString("C")</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-controller="Order" asp-action="Details" asp-route-orderId="@orderHeader.ID" class="btn btn-primary btn-sm me-2" title="Edit Product">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            
+        </div>
+    </div>
+</div>

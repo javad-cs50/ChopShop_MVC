@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="D:/ChopShop/ChopShop.DataAccess/ChopShop.DataAccess.csproj" Id="4a67f943-3956-4b25-a92a-26ceb1fad061" />
+  <Project Path="D:/ChopShop/ChopShop.Models/ChopShop.Models.csproj" Id="e63916e3-f7a7-4410-bc4c-89146dd580ce" />
+  <Project Path="D:/ChopShop/ChopShop.Utility/ChopShop.Utility.csproj" Id="ac96495e-bcae-47c8-86d5-24a4ee62883b" />
+  <Project Path="D:/ChopShop/ChopShop.Web/ChopShop.Web.csproj" />
+</Solution>

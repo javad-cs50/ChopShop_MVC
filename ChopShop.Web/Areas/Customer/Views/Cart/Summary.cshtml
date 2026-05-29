@@ -1,0 +1,127 @@
+﻿@model ShoppingCartVM
+@{
+    ViewData["Title"] = "Checkout Summary";
+}
+@Html.AntiForgeryToken()
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary bg-gradient text-white d-flex align-items-center justify-content-between flex-wrap p-3">
+            <h2 class="h5 mb-0 me-2">
+                <i class="fas fa-clipboard-check me-2" aria-hidden="true"></i> Checkout Summary
+            </h2>
+            <a class="btn btn-outline-light btn-sm" asp-controller="Cart" asp-action="Index">
+                <i class="fas fa-arrow-left me-1" aria-hidden="true"></i> Shopping Cart
+            </a>
+        </div>
+
+        <div class="card-body p-4">
+            <form method="post">
+                <input asp-for="@Model.OrderHeader.UserId" hidden />
+                <input asp-for="@Model.ShoppingCartList" hidden />
+                <div class="row g-4">
+                    <div class="col-12 col-lg-8">
+                        <div class="bg-light border rounded p-3 mb-4">
+                            <h3 class="h6 fw-bold mb-3 text-muted d-flex align-items-center gap-2">
+                                <i class="fas fa-receipt" aria-hidden="true"></i> Delivery & Contact Information
+                            </h3>
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="@Model.OrderHeader.Name" class="form-label fw-semibold">Name</label>
+                                    <input asp-for="@Model.OrderHeader.Name" class="form-control" placeholder="Full name" />
+                                    <span asp-validation-for="@Model.OrderHeader.Name" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label asp-for="@Model.OrderHeader.PhoneNumber" class="form-label fw-semibold">Phone Number</label>
+                                    <input asp-for="@Model.OrderHeader.PhoneNumber" class="form-control" placeholder="e.g., +98 912 345 6789" />
+                                    <span asp-validation-for="@Model.OrderHeader.PhoneNumber" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-12">
+                                    <label asp-for="@Model.OrderHeader.Address" class="form-label fw-semibold">Address</label>
+                                    <textarea asp-for="@Model.OrderHeader.Address" class="form-control" rows="3" placeholder="Street, city, province, postal code"></textarea>
+                                    <span asp-validation-for="@Model.OrderHeader.Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-light border rounded p-3">
+                            <h3 class="h6 fw-bold mb-3 text-muted d-flex align-items-center gap-2">
+                                <i class="fas fa-bag-shopping" aria-hidden="true"></i> Items in Your Cart
+                            </h3>
+
+                            @if (Model.ShoppingCartList != null && Model.ShoppingCartList.Any())
+                            {
+                                <div class="row g-3">
+                                    @foreach (var item in Model.ShoppingCartList)
+                                    {
+                                        var itemTotal = item.Product.Price * item.Count;
+
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-start justify-content-between gap-3 pb-3 border-bottom">
+                                                <div class="d-flex gap-3 align-items-center">
+                                                    <div class="product-image-container bg-white border rounded p-2 d-flex justify-content-center align-items-center" style="min-width:72px; min-height:72px;">
+                                                        <img src="~/@item.Product.ImageUrl"
+                                                             alt="@item.Product.Title"
+                                                             class="img-fluid rounded"
+                                                             style="max-height:60px; width:auto; object-fit:contain;"
+                                                             loading="lazy" />
+                                                    </div>
+
+                                                    <div>
+                                                        <div class="fw-bold text-dark">@item.Product.Title</div>
+                                                        @if (item.Product.Category != null)
+                                                        {
+                                                            <span class="badge bg-warning text-dark">@item.Product.Category.Name</span>
+                                                        }
+                                                        <div class="text-muted small mt-1">
+                                                            Qty: <span class="fw-semibold text-body">@item.Count</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="text-end">
+                                                    <div class="text-muted small">Subtotal</div>
+                                                    <div class="fs-5 text-success fw-bold">@itemTotal.ToString("C")</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-5">
+                                    <i class="fas fa-shopping-basket fa-3x text-muted mb-3"></i>
+                                    <span class="m-2">Cart Is Empty!</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <div class="bg-light border rounded p-4 sticky-top" style="top: 20px;">
+                            <h4 class="h5 text-muted mb-3 border-bottom pb-2">Order Summary</h4>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="fw-semibold">Total</span>
+                                <span class="fs-4 text-success fw-bold">@Model.OrderHeader.OrderTotal.ToString("C")</span>
+                            </div>
+
+                            <button  type="submit" class="btn btn-primary bg-gradient btn-lg w-100 d-flex justify-content-center align-items-center gap-2">
+                                Checkout
+                                <i class="fas fa-check" aria-hidden="true"></i>
+                            </button>
+
+                            <div class="text-muted small mt-3">
+                                By confirming, you will proceed to payment and order processing.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

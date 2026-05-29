@@ -1,0 +1,31 @@
+﻿@using System.Security.Claims
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a asp-route-userId="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value" asp-area="Identity" asp-controller="Account" asp-action="Update" class="nav-link text-light" title="Manage">Hello @User.Identity?.Name!</a>
+        </li>
+        <li class="nav-item">
+            <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="nav-link btn btn-link text-light btn btn-outline-danger"><i class="fas fa-right-from-bracket"></i>Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-light btn btn-outline-secondary" asp-area="Identity" asp-controller="Account" asp-action="Register">
+                <i class="fas fa-edit"></i>
+                Register
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light btn btn-outline-secondary" asp-area="Identity" asp-controller="Account" asp-action="Login">
+                <i class="fas fa-right-to-bracket"></i>
+                Login
+            </a>
+        </li>
+    }
+</ul>

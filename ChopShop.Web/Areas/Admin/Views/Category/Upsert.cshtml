@@ -1,0 +1,48 @@
+﻿@model Category
+<div class="card shadow-lg border-0 my-4">
+    <div class="card-header bg-primary text-white text-center py-3">
+        <h2 class="mb-0">@(Model.Id < 1 ? "Create Category" : "Update Category")</h2>
+    </div>
+    <div class="card-body p-4">
+        <form method="post">    
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="@Model.Name" class="form-label"></label>
+                    <input asp-for="@Model.Name" class="form-control" placeholder="Enter category name" autofocus />
+                    <span asp-validation-for="@Model.Name" class="text-danger mt-1 d-block"></span>
+                </div>
+                <div class="col-12 mt-3">
+
+                    <label asp-for="@Model.DisplayOrder" class="form-label"></label>
+                    <input asp-for="@Model.DisplayOrder" class="form-control" type="number" placeholder="Enter display order" />
+                    <span asp-validation-for="@Model.DisplayOrder" class="text-danger mt-1 d-block"></span>
+                </div>
+                <div class="col-12 mt-4">
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-2 mb-md-0">
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fa-solid @(Model.Id < 1 ? "fa-plus-circle" : "fa-edit") me-2"></i>
+                                @(Model.Id < 1 ? "Create" : "Update")
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-6">
+
+                            <a asp-controller="Category" asp-action="Index" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-arrow-alt-circle-left me-2"></i>
+                                Back to List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

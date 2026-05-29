@@ -1,0 +1,178 @@
+﻿@model List<UserWithRoleVM>
+
+<div class="container py-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white py-3">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h2 class="mb-0 text-center text-md-start">Users List</h2>
+                </div>
+                <div class="col-auto">
+                    <a asp-controller="Account" asp-action="Create" class="btn btn-light btn-sm text-primary">
+                        <i class="fas fa-plus-circle me-2"></i> Create New User
+                    </a>
+                </div>
+            </div>
+        </div>
+        @* <div class="card-body p-4 ">
+            <div class="row mb-1 border-bottom text-center">
+                <form asp-action="index" method="get" class="text-center col-4 col-sm-9 ">
+                    <div class="col-9 text-center form-control">
+                        <select name="userRole" asp-items="ViewBag.UserTypes" class="form-select">
+                            <option value="">All</option>
+                        </select>
+                        <label class="form-check-label">Is Lock</label>
+                        <input type="checkbox" name="isLock" class=" form-check-input" value="true" />
+                    </div>
+                    <button type="submit" class=" btn btn-outline-primary form-control mb-1"> Filter <i class=" fas fa-filter"></i></button>
+                </form>
+            </div>
+        </div> *@
+
+
+        <div class="card-body p-4">
+            <div class="row mb-1 ">
+                <div class="col-md-4 d-flex justify-content-center">
+                    <form asp-action="Index" method="get" class="w-100 px-3 py-2 border ">
+                        <div class="d-flex justify-content-center  w-100 mb-2">
+                            <select name="userRole" asp-items="ViewBag.UserTypes" class="form-select form-select-sm w-auto me-2">
+                                <option value="">All</option>
+                            </select>
+                            <div class="d-flex align-items-center border p-1">
+                                <input type="checkbox" name="isLock" class="form-check-input form-check-input-sm me-1" value="true">
+                                <label for="isLock" class="form-check-label text-muted fw-medium">Is Locked</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary btn-sm w-100 rounded-2 py-1">
+                            <i class="fas fa-filter "></i> Filter
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info text-center" role="alert">
+                No User found. Click "Create New User" to add one.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-nowrap">Email</th>
+                            <th scope="col" class="text-nowrap">Phone Number</th>
+                            <th scope="col" class="text-nowrap">Role</th>
+                            <th scope="col" class="text-center text-nowrap" style="width: 150px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (User.IsInRole(SD.Role_Admin))
+                        {
+                            @foreach (var obj in Model)
+                            {
+                                var isLocked = obj.User.LockoutEnd.HasValue && obj.User.LockoutEnd.Value > DateTime.UtcNow;
+                                <tr>
+                                    <td>@obj.User.NormalizedEmail</td>
+                                    <td>@obj.User.PhoneNumber</td>
+                                    <td>@obj.Role</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-controller="Account" asp-action="Update" asp-route-userId="@obj.User.Id" class="btn btn-primary btn-sm me-2" title="Edit User">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            @if (obj.Role.Equals(ChopShop.Utility.SD.Role_Customer) || obj.Role.Equals(ChopShop.Utility.SD.Role_Employee))
+                                            {
+                                                @if (isLocked)
+                                                {
+                                                    <form asp-area="Identity" asp-controller="Account" asp-action="UnlockUser" method="post" style="display:inline;">
+                                                        <input type="hidden" name="userId" value="@obj.User.Id" />
+                                                        <button type="submit" class="btn btn-success btn-sm me-2" title="Unlock User">
+                                                            <i class="fas fa-unlock"></i> Unlocked
+                                                        </button>
+                                                    </form>
+
+                                                }
+                                                else
+                                                {
+                                                    <form asp-area="Identity" asp-controller="Account" asp-action="LockUser" method="post" style="display:inline;">
+                                                        <input type="hidden" name="userId" value="@obj.User.Id" />
+                                                        <button type="submit" class="btn btn-danger btn-sm me-2" title="Lock User">
+                                                            <i class="fas fa-unlock"></i> locked
+                                                        </button>
+                                                    </form>
+                                                }
+                                            }
+                                            @if (obj.Role.Equals(SD.Role_Customer) || obj.Role.Equals(ChopShop.Utility.SD.Role_Employee))
+                                            {
+
+                                                <a asp-controller="Account" asp-action="RoleManagement" asp-route-userId="@obj.User.Id" class="btn btn-warning btn-sm me-2" title="Permision">
+                                                    <i class="fas fa-crown"></i> Permision
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+                        else if (User.IsInRole(SD.Role_Employee))
+                        {
+                            @foreach (var obj in Model)
+                            {
+                                if (obj.Role != SD.Role_Admin)
+                                {
+                                    var isLocked = obj.User.LockoutEnd.HasValue && obj.User.LockoutEnd.Value > DateTime.UtcNow;
+                                    <tr>
+                                        <td>@obj.User.NormalizedEmail</td>
+                                        <td>@obj.User.PhoneNumber</td>
+                                        <td>@obj.Role</td>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group">
+                                                <a asp-controller="Account" asp-action="Update" asp-route-userId="@obj.User.Id" class="btn btn-primary btn-sm me-2" title="Edit User">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </a>
+                                                @if (obj.Role.Equals(ChopShop.Utility.SD.Role_Customer))
+                                                {
+                                                    @if (isLocked)
+                                                    {
+                                                        <form asp-area="Identity" asp-controller="Account" asp-action="UnlockUser" method="post" style="display:inline;">
+                                                            <input type="hidden" name="userId" value="@obj.User.Id" />
+                                                            <button type="submit" class="btn btn-success btn-sm me-2" title="Unlock User">
+                                                                <i class="fas fa-unlock"></i> Unlocked
+                                                            </button>
+                                                        </form>
+                                                    }
+                                                    else
+                                                    {
+                                                        <form asp-area="Identity" asp-controller="Account" asp-action="LockUser" method="post" style="display:inline;">
+                                                            <input type="hidden" name="userId" value="@obj.User.Id" />
+                                                            <button type="submit" class="btn btn-danger btn-sm me-2" title="Lock User">
+                                                                <i class="fas fa-unlock"></i> locked
+                                                            </button>
+                                                        </form>
+                                                    }
+                                                }
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+</div>
+
+
+

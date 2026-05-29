@@ -1,0 +1,60 @@
+﻿@model List<Product>
+<partial name="_Notification" />
+@{
+    var categories = ViewBag.Categories as List<Category>;
+    int selectedCategoryId = ViewBag.SelectedCategoryId != null ? (int)ViewBag.SelectedCategoryId : 0;
+    var colors = new[]
+        {
+        "#EDE1B3" ,"#F2D0B0", "#B9E6EE", "#D8F0F8", "#B0C7CF", "#F7B9D7" ,"#DCC7F3" ,"#BFD2F6", "#BFF0DA" ,"#B9D7CA"
+    };
+}
+@if (categories != null)
+{
+    <div class="d-flex flex-wrap gap-2">
+        @foreach (var c in categories)
+        {
+            var bg = colors[c.Id % colors.Length];
+            <a  asp-controller="Home"
+               asp-action="Index"
+               asp-route-categoryId="@c.Id"
+               class="btn text-success"
+               style="background-color:@bg;">
+                @c.Name
+            </a>
+        }
+    </div>
+}
+
+
+<div class="row pb-3">
+    @if (Model.Any())
+    {
+        @foreach (var product in Model)
+        {
+            <div class="col-sm-6 col-lg-3">
+                <div class="row p-2">
+                    <div class="col-12 p-1">
+                        <div class="card border-0 p-3 shadow border-top border-5 rounded">
+                            <img src="@product.ImageUrl" class="card-img-top rounded" style="height:200px" alt="@product.Title Image" />
+                            <div class="card-body pb-0">
+                                <div class="pl-1">
+                                    <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@(product.Title)</p>
+                                    <p class="text-dark opacity-75 text-center">Price : @(product.Price) $</p>
+                                </div>
+                            </div>
+                            <div>
+                                <a asp-controller="Home" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary bg-gradient border-0 form-control">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        }
+    }
+    else
+    {
+        <h1 class="text-center text-danger m-5"><i class="fas fa-circle-xmark"> </i> No Product Founded</h1>
+    }
+</div>

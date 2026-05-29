@@ -1,0 +1,49 @@
+﻿@model RegisterVM
+@Html.AntiForgeryToken()
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-12 col-lg-6 col-md-9">
+        <div class="card shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+            <div class="card-header text-center bg-primary text-white py-3 rounded-top">
+                <h2 class="mb-0">Register</h2>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input type="email" asp-for="Email" class="form-control" placeholder="Enter Your Email" />
+                        <span asp-validation-for="Email" class="text-danger mt-1 d-block"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="form-label">PhoneNumber</label>
+                        <input type="number" asp-for="PhoneNumber" class="form-control" placeholder="Enter Your PhoneNumber" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger mt-1 d-block"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Enter Your Password" />
+                        <span asp-validation-for="Password" class="text-danger mt-1 d-block"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" asp-for="ConfirmPassword" class="form-control" placeholder="Enter Password Again" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger mt-1 d-block"></span>
+                    </div>
+                    <div class="d-grid gap-2 mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">Register </button>
+                    </div>
+                    <p class="text-center mt-3">
+                        Have An Account? <a asp-area="Identity" asp-controller="Account" asp-action="Login" class="text-decoration-none">Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
